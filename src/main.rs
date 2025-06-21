@@ -1,5 +1,4 @@
 use clap::Parser;
-use colored::Colorize;
 
 const FULL_BLOCK: &str = "█";
 const SEVEN_EIGHTHS_BLOCK: &str = "▉";
@@ -50,14 +49,13 @@ fn create_bar(length: usize, proportion: f32) -> Result<String, &'static str> {
             5.0 => FIVE_EIGHTHS_BLOCK,
             6.0 => SIX_EIGHTHS_BLOCK,
             7.0 => SEVEN_EIGHTHS_BLOCK,
-            _ => FULL_BLOCK, // This case should not happen
+            _ => FULL_BLOCK,
         };
         filled_full + last
     } else {
         filled_full
     };
     let remaining_length = length.saturating_sub(filled.chars().count());
-    // dbg!(remaining_length);
     let remaining = EMPTY_BLOCK.repeat(remaining_length);
     Ok(format!("{}{}", filled, remaining))
 }
@@ -66,6 +64,6 @@ fn main() {
     let args = Args::parse();
     match create_bar(args.length.unwrap_or(12), args.proportion) {
         Ok(bar) => println!("{}", bar),
-        Err(e) => eprintln!("Error: {}", e),
+        Err(e) => {eprintln!("{}", e); std::process::exit(1);},
     }
 }
